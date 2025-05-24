@@ -8,11 +8,13 @@ const APP_TITLE: &str = "Intra Office AI";
 
 use tokio::runtime::Runtime;
 use warp::Filter;
+use warp::fs::dir;
 
 fn main() {
     let rt = Runtime::new().unwrap();
     rt.spawn(async {
-        let routes = warp::path::end().map(|| warp::reply::html("Hello, World!"));
+        // Serve static files from the web/dist directory
+        let routes = warp::fs::dir("web/dist");
         warp::serve(routes).run(([127, 0, 0, 1], 3030)).await;
     });
 
